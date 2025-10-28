@@ -1,0 +1,49 @@
+{
+  "name": "docutray-plugins",
+  "owner": {
+    "name": "Roberto Arce",
+    "email": "roberto@docutray.com"
+  },
+  "metadata": {
+    "description": "Docutray's collection of Claude Code plugins for agile development workflows",
+    "version": "1.0.0",
+    "pluginRoot": "."
+  },
+  "plugins": [
+    {
+      "name": "devflow",
+      "source": ".",
+      "description": "Complete agile development workflow commands for Claude Code based on GitHub and best practices. Includes feature planning, implementation, validation, and PR review commands.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Roberto Arce",
+        "email": "roberto@docutray.com"
+      },
+      "homepage": "https://github.com/docutray/docutray-claude-code-plugins",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/docutray/docutray-claude-code-plugins"
+      },
+      "license": "MIT",
+      "keywords": [
+        "development",
+        "workflow",
+        "agile",
+        "github",
+        "devops",
+        "ci-cd",
+        "testing",
+        "code-review",
+        "feature-development",
+        "issue-management"
+      ],
+      "category": "development",
+      "tags": [
+        "workflow",
+        "github",
+        "agile",
+        "testing"
+      ]
+    }
+  ]
+}
