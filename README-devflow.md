@@ -125,13 +125,19 @@ Skip `/check` as it's automatically run by `/dev` and `/review-pr`.
 
 ### 1. Install DevFlow Commands
 
-Add this plugin to your Claude Code configuration:
+Install directly from GitHub (recommended):
 
 ```bash
-/plugin install devflow@docutray
+/plugin install https://github.com/docutray/docutray-claude-code-plugins
 ```
 
-Or for local development:
+**Why this method?**
+- ✅ Always gets the latest version
+- ✅ No marketplace configuration needed
+- ✅ Works in any Claude Code environment
+- ✅ Automatic updates on reinstall
+
+**For local development:**
 1. Clone this repository
 2. Add as development marketplace
 3. Install via `/plugin install devflow@dev`
@@ -427,6 +433,7 @@ To contribute to DevFlow:
 - **Issues**: [GitHub Issues](https://github.com/docutray/docutray-claude-code-plugins/issues)
 - **Documentation**: This file and command `.md` files
 - **Examples**: See `templates/` directory
+- **Contact**: Roberto Arce (roberto@docutray.com)
 
 ---
 

@@ -33,13 +33,19 @@ docutray-claude-code-plugins/
 
 ## Installation
 
-### From Plugin Marketplace
+### From GitHub URL (Recommended)
 
-If this plugin is available in a marketplace:
+Install directly from the GitHub repository:
 
 ```bash
-/plugin install docutray-plugins@marketplace-name
+/plugin install https://github.com/docutray/docutray-claude-code-plugins
 ```
+
+This method:
+- ✅ Always gets the latest version
+- ✅ No marketplace configuration needed
+- ✅ Works in any Claude Code environment
+- ✅ Automatic updates on reinstall
 
 ### From Local Development
 
@@ -47,7 +53,7 @@ For testing or development:
 
 1. Clone this repository
 2. Add it as a development marketplace in your Claude Code settings
-3. Install via `/plugin install docutray-plugins@dev`
+3. Install via `/plugin install devflow@dev`
 
 ## Available Components
 
@@ -132,7 +138,7 @@ For detailed information on creating and using Claude Code plugins:
 For issues or questions:
 - Open an issue in this repository
 - Refer to the [official Claude Code documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- Contact Docutray organization maintainers
+- Contact: Roberto Arce (roberto@docutray.com)
 
 ---
 
