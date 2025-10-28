@@ -15,8 +15,20 @@ docutray-claude-code-plugins/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin metadata and configuration
 ├── commands/                # Custom slash commands
+│   ├── research.md          # Research command
+│   ├── epic.md              # Epic planning command
+│   ├── feat.md              # Feature specification command
+│   ├── dev.md               # Development implementation command
+│   ├── check.md             # Validation command
+│   ├── review-pr.md         # PR review command
+│   └── devflow-setup.md     # Setup command
+├── templates/               # Framework-specific templates
+│   ├── typescript-node/     # TypeScript/Node.js templates
+│   └── python/              # Python templates
 ├── skills/                  # Agent Skills
-└── README.md
+├── README.md                # Main documentation
+├── README-devflow.md        # DevFlow complete guide
+└── CLAUDE.md                # Claude Code guidance
 ```
 
 ## Installation
@@ -38,6 +50,35 @@ For testing or development:
 3. Install via `/plugin install docutray-plugins@dev`
 
 ## Available Components
+
+### DevFlow - Agile Development Workflow
+
+A comprehensive set of slash commands that implement a complete agile development workflow based on GitHub and best practices.
+
+**Quick Start**:
+```bash
+# Configure for your project
+/devflow-setup
+
+# Standard workflow
+/feat feature-name     # Create specification
+/dev issue#123        # Implement feature
+/check                # Validate quality
+/review-pr 45         # Review PR
+```
+
+**Commands**:
+- **`/feat`** - Create detailed feature specifications and GitHub issues
+- **`/dev`** - Implement features from issues with automated workflow
+- **`/check`** - Run parallel validations (tests, linting, type checking, build)
+- **`/review-pr`** - Perform comprehensive PR reviews
+- **`/research`** - Research topics before planning (optional)
+- **`/epic`** - Plan major initiatives with multiple phases (optional)
+- **`/devflow-setup`** - Configure DevFlow for your project
+
+**Framework Support**: TypeScript/Node.js, Python, Go, Ruby, Java, Rust, and more.
+
+**[→ Read Complete DevFlow Documentation](./README-devflow.md)**
 
 ### Slash Commands
 

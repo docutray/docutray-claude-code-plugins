@@ -1,0 +1,29 @@
+{
+  "name": "devflow",
+  "version": "1.0.0",
+  "description": "Complete agile development workflow commands for Claude Code based on GitHub and best practices. Includes feature planning, implementation, validation, and PR review commands.",
+  "author": {
+    "name": "Docutray",
+    "email": "plugins@docutray.com",
+    "url": "https://github.com/docutray"
+  },
+  "homepage": "https://github.com/docutray/docutray-claude-code-plugins",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/docutray/docutray-claude-code-plugins"
+  },
+  "license": "MIT",
+  "keywords": [
+    "development",
+    "workflow",
+    "agile",
+    "github",
+    "devops",
+    "ci-cd",
+    "testing",
+    "code-review",
+    "feature-development",
+    "issue-management"
+  ],
+  "commands": "./commands"
+}
