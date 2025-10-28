@@ -4,23 +4,6 @@
   "description": "Complete agile development workflow commands for Claude Code based on GitHub and best practices. Includes feature planning, implementation, validation, and PR review commands.",
   "author": {
     "name": "Roberto Arce",
-    "email": "roberto@docutray.com",
-    "url": "https://github.com/docutray"
-  },
-  "homepage": "https://github.com/docutray/docutray-claude-code-plugins",
-  "repository": "https://github.com/docutray/docutray-claude-code-plugins",
-  "license": "MIT",
-  "keywords": [
-    "development",
-    "workflow",
-    "agile",
-    "github",
-    "devops",
-    "ci-cd",
-    "testing",
-    "code-review",
-    "feature-development",
-    "issue-management"
-  ],
-  "commands": "./commands"
+    "email": "roberto@docutray.com"
+  }
 }
