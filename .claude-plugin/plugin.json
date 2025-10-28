@@ -8,10 +8,7 @@
     "url": "https://github.com/docutray"
   },
   "homepage": "https://github.com/docutray/docutray-claude-code-plugins",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/docutray/docutray-claude-code-plugins"
-  },
+  "repository": "https://github.com/docutray/docutray-claude-code-plugins",
   "license": "MIT",
   "keywords": [
     "development",
