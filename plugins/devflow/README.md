@@ -10,71 +10,71 @@ DevFlow provides a structured approach to software development, from research an
 
 ### Core Workflow Commands
 
-#### `/feat` - Feature Specification
+#### `/devflow:feat` - Feature Specification
 Create detailed technical specifications and GitHub issues with acceptance criteria.
 
 ```bash
-/feat <feature-name> [--type=feat|fix|docs|refactor|test|chore] [--priority=low|medium|high|critical]
+/devflow:feat <feature-name> [--type=feat|fix|docs|refactor|test|chore] [--priority=low|medium|high|critical]
 ```
 
 **When to use**: When you have a clear feature or fix to implement.
 
-#### `/dev` - Development Implementation
+#### `/devflow:dev` - Development Implementation
 Implement features based on GitHub issues, following best practices and ending with a Pull Request.
 
 ```bash
-/dev issue#<number> [--branch=custom-name] [--draft] [--auto-tests] [--full-validation]
+/devflow:dev issue#<number> [--branch=custom-name] [--draft] [--auto-tests] [--full-validation]
 ```
 
-**When to use**: After creating an issue with `/feat` and ready to implement.
+**When to use**: After creating an issue with `/devflow:feat` and ready to implement.
 
-#### `/check` - Quality Validation
+#### `/devflow:check` - Quality Validation
 Execute all project validations in parallel: tests, linting, type checking, and build.
 
 ```bash
-/check              # All validations
-/check --fast       # Skip build
-/check --verbose    # Show full output
+/devflow:check              # All validations
+/devflow:check --fast       # Skip build
+/devflow:check --verbose    # Show full output
 ```
 
 **When to use**: During development to validate changes, or as part of PR review.
 
-#### `/review-pr` - Pull Request Review
+#### `/devflow:review-pr` - Pull Request Review
 Perform complete technical review of Pull Requests with optional functional testing.
 
 ```bash
-/review-pr <pr-number> [--fix-issues] [--auto-approve] [--functional-tests]
+/devflow:review-pr <pr-number> [--fix-issues] [--auto-approve] [--functional-tests]
 ```
 
 **When to use**: After a PR is created to review and approve changes.
 
 ### Optional Planning Commands
 
-#### `/research` - Research & Analysis
+#### `/devflow:research` - Research & Analysis
 Research topics and technologies before creating epics or features.
 
 ```bash
-/research <topic> [--depth=shallow|medium|deep] [--output=summary|detailed|report]
+/devflow:research <topic> [--depth=shallow|medium|deep] [--output=summary|detailed|report]
 ```
 
 **When to use**: Before starting major initiatives or when evaluating technologies.
 
-#### `/epic` - Epic Planning
+#### `/devflow:epic` - Epic Planning
 Create epic issues for major initiatives with multiple phases and related issues.
 
 ```bash
-/epic <epic-name> [--priority=low|medium|high|critical] [--target-version=X.Y.Z]
+/devflow:epic <epic-name> [--priority=low|medium|high|critical] [--target-version=X.Y.Z]
 ```
 
 **When to use**: For large features that span multiple issues and require dedicated planning.
 
 ### Setup Command
 
-#### `/devflow-setup` - Configuration
+#### `/devflow:devflow-setup` - Configuration
 Configure DevFlow commands for your project's framework and requirements.
 
 ```bash
-/devflow-setup [--framework=<name>] [--force]
+/devflow:devflow-setup [--framework=<name>] [--force]
 ```
 
 **When to use**: First time using DevFlow in a project, or when reconfiguring.
@@ -86,22 +86,22 @@ Configure DevFlow commands for your project's framework and requirements.
 For most features and fixes:
 
 ```
-/feat → /dev → /check → /review-pr
+/devflow:feat → /devflow:dev → /devflow:check → /devflow:review-pr
 ```
 
-1. **`/feat new-feature`** - Create feature specification and GitHub issue
-2. **`/dev issue#123`** - Implement the feature
-  - If OpenSpec is enabled in the repo, `/dev` generates an OpenSpec proposal from the issue at the start of the work.
-3. **`/check`** - Validate implementation
-  - If OpenSpec is enabled, `/check` can also archive the proposal as a pre-PR gate.
-4. **`/review-pr 45`** - Review and approve PR
+1. **`/devflow:feat new-feature`** - Create feature specification and GitHub issue
+2. **`/devflow:dev issue#123`** - Implement the feature
+  - If OpenSpec is enabled in the repo, `/devflow:dev` generates an OpenSpec proposal from the issue at the start of the work.
+3. **`/devflow:check`** - Validate implementation
+  - If OpenSpec is enabled, `/devflow:check` can also archive the proposal as a pre-PR gate.
+4. **`/devflow:review-pr 45`** - Review and approve PR
 
 ### OpenSpec-Enhanced Flow
 
 If your team uses OpenSpec for design proposals, DevFlow can incorporate it as part of the normal flow:
 
 ```
-/feat → /dev (generate proposal) → /check (archive proposal) → /review-pr
+/devflow:feat → /devflow:dev (generate proposal) → /devflow:check (archive proposal) → /devflow:review-pr
 ```
 
 Key rules:
@@ -113,15 +113,15 @@ Key rules:
 For major initiatives:
 
 ```
-/research → /epic → /feat → /dev → /check → /review-pr
+/devflow:research → /devflow:epic → /devflow:feat → /devflow:dev → /devflow:check → /devflow:review-pr
 ```
 
-1. **`/research oauth-implementation`** - Research OAuth integration options
-2. **`/epic oauth-integration`** - Create epic with multiple phases
-3. **`/feat oauth-backend`** - Create spec for backend OAuth support
-4. **`/dev issue#123`** - Implement OAuth backend (targets epic branch)
-5. **`/check`** - Validate changes
-6. **`/review-pr 45`** - Review PR (merges to epic branch)
+1. **`/devflow:research oauth-implementation`** - Research OAuth integration options
+2. **`/devflow:epic oauth-integration`** - Create epic with multiple phases
+3. **`/devflow:feat oauth-backend`** - Create spec for backend OAuth support
+4. **`/devflow:dev issue#123`** - Implement OAuth backend (targets epic branch)
+5. **`/devflow:check`** - Validate changes
+6. **`/devflow:review-pr 45`** - Review PR (merges to epic branch)
 7. Repeat steps 3-6 for other epic components
 8. Create final PR from epic branch to main
 
@@ -130,10 +130,10 @@ For major initiatives:
 For simple fixes:
 
 ```
-/feat → /dev → /review-pr
+/devflow:feat → /devflow:dev → /devflow:review-pr
 ```
 
-Skip `/check` as it's automatically run by `/dev` and `/review-pr`.
+Skip `/devflow:check` as it's automatically run by `/devflow:dev` and `/devflow:review-pr`.
 
 ## Getting Started
 
@@ -173,7 +173,7 @@ cd docutray-claude-code-plugins
 Run the setup command in your project:
 
 ```bash
-/devflow-setup
+/devflow:devflow-setup
 ```
 
 This will:
@@ -187,7 +187,7 @@ This will:
 Create your first feature:
 
 ```bash
-/feat user-authentication --type=feat --priority=high
+/devflow:feat user-authentication --type=feat --priority=high
 ```
 
 ## Configuration
@@ -263,27 +263,27 @@ Additional frameworks can be configured manually.
 
 ### How Commands Work Together
 
-1. **`/feat`** creates structured GitHub issues
-2. **`/dev`** uses those issues to guide implementation
-3. **`/check`** validates code quality (used by both `/dev` and `/review-pr`)
-4. **`/review-pr`** reviews PRs created by `/dev`
+1. **`/devflow:feat`** creates structured GitHub issues
+2. **`/devflow:dev`** uses those issues to guide implementation
+3. **`/devflow:check`** validates code quality (used by both `/devflow:dev` and `/devflow:review-pr`)
+4. **`/devflow:review-pr`** reviews PRs created by `/devflow:dev`
 
 ### Epic Workflow
 
 When using epics:
 
-1. **`/epic`** creates epic issue and dedicated branch
-2. **`/feat`** for epic-related features links to epic
-3. **`/dev`** targets epic branch instead of main
-4. **`/review-pr`** reviews PRs into epic branch
+1. **`/devflow:epic`** creates epic issue and dedicated branch
+2. **`/devflow:feat`** for epic-related features links to epic
+3. **`/devflow:dev`** targets epic branch instead of main
+4. **`/devflow:review-pr`** reviews PRs into epic branch
 5. Final PR merges epic branch to main
 
 ### Data Flow
 
 ```
-GitHub Issues ←→ /feat ←→ /dev ←→ /check
-                          ↓
-                   Pull Requests ←→ /review-pr
+GitHub Issues ←→ /devflow:feat ←→ /devflow:dev ←→ /devflow:check
+                                        ↓
+                                 Pull Requests ←→ /devflow:review-pr
 ```
 
 ## Best Practices
@@ -293,8 +293,8 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 1. **Start small**: Break large features into smaller issues
 2. **Clear criteria**: Define acceptance criteria upfront
 3. **Frequent commits**: Commit often with descriptive messages
-4. **Continuous validation**: Run `/check` regularly during development
-5. **Complete reviews**: Use `/review-pr` for all PRs
+4. **Continuous validation**: Run `/devflow:check` regularly during development
+5. **Complete reviews**: Use `/devflow:review-pr` for all PRs
 
 ### Epic Management
 
@@ -306,10 +306,10 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 
 ### Code Quality
 
-1. **Run validations**: Always run `/check` before creating PR
+1. **Run validations**: Always run `/devflow:check` before creating PR
 2. **Fix issues**: Address all linting and type errors
 3. **Test coverage**: Maintain minimum coverage thresholds
-4. **Code review**: Use `/review-pr` for thorough reviews
+4. **Code review**: Use `/devflow:review-pr` for thorough reviews
 5. **Documentation**: Update docs with feature changes
 
 ## Troubleshooting
@@ -318,7 +318,7 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 
 **Commands not working**:
 - Ensure plugin is installed: `/plugin list`
-- Run setup: `/devflow-setup --force`
+- Run setup: `/devflow:devflow-setup --force`
 
 **Validation failures**:
 - Check configuration in `.claude/details/commands/check.md`
@@ -331,7 +331,7 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 - Check repository access
 
 **Framework not supported**:
-- Use `/devflow-setup` and select "Other"
+- Use `/devflow:devflow-setup` and select "Other"
 - Manually configure validation commands
 - Create templates based on examples
 
@@ -340,7 +340,7 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 1. Check command documentation: Read command `.md` files
 2. Review configuration: Check `.claude/details/commands/`
 3. Test manually: Run validation commands directly
-4. Reconfigure: Use `/devflow-setup --force`
+4. Reconfigure: Use `/devflow:devflow-setup --force`
 
 ## Examples
 
@@ -348,46 +348,46 @@ GitHub Issues ←→ /feat ←→ /dev ←→ /check
 
 ```bash
 # Create feature specification
-/feat add-dark-mode --type=feat
+/devflow:feat add-dark-mode --type=feat
 
 # Implement (creates branch, codes, creates PR)
-/dev issue#123
+/devflow:dev issue#123
 
 # Review (checks out branch, validates, reviews)
-/review-pr 45
+/devflow:review-pr 45
 ```
 
 ### Example 2: Bug Fix
 
 ```bash
 # Create fix specification
-/feat login-redirect-bug --type=fix --priority=high
+/devflow:feat login-redirect-bug --type=fix --priority=high
 
 # Implement fix
-/dev issue#124 --auto-tests
+/devflow:dev issue#124 --auto-tests
 
 # Quick review and approve
-/review-pr 46 --auto-approve
+/devflow:review-pr 46 --auto-approve
 ```
 
 ### Example 3: Large Epic
 
 ```bash
 # Research first
-/research microservices-architecture --depth=deep
+/devflow:research microservices-architecture --depth=deep
 
 # Create epic
-/epic microservices-migration --priority=critical
+/devflow:epic microservices-migration --priority=critical
 
 # Epic creates issues #125, #126, #127, #128
 
 # Implement first component
-/dev issue#125
-/review-pr 47
+/devflow:dev issue#125
+/devflow:review-pr 47
 
 # Implement second component
-/dev issue#126
-/review-pr 48
+/devflow:dev issue#126
+/devflow:review-pr 48
 
 # ... continue with remaining issues
 
@@ -439,7 +439,7 @@ Align local validations with CI:
 
 ```bash
 # Local validation
-/check
+/devflow:check
 
 # Should match CI validation
 # .github/workflows/ci.yml

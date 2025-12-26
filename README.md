@@ -39,26 +39,26 @@ A comprehensive set of slash commands that implement a complete agile developmen
 /plugin install devflow@docutray-plugins
 
 # Configure for your project
-/devflow-setup
+/devflow:devflow-setup
 
 # Standard workflow
-/feat feature-name     # Create specification & GitHub issue
-/dev issue#123         # Implement feature
-/check                 # Validate quality
-/review-pr 45          # Review PR
+/devflow:feat feature-name     # Create specification & GitHub issue
+/devflow:dev issue#123         # Implement feature
+/devflow:check                 # Validate quality
+/devflow:review-pr 45          # Review PR
 ```
 
 ### Commands
 
 | Command | Description |
 |---------|-------------|
-| `/devflow-setup` | Configure DevFlow for your project |
-| `/feat` | Create feature specifications and GitHub issues |
-| `/dev` | Implement features from GitHub issues |
-| `/check` | Run parallel validations (tests, lint, types, build) |
-| `/review-pr` | Perform comprehensive PR reviews |
-| `/research` | Research topics before planning |
-| `/epic` | Plan major initiatives with multiple phases |
+| `/devflow:devflow-setup` | Configure DevFlow for your project |
+| `/devflow:feat` | Create feature specifications and GitHub issues |
+| `/devflow:dev` | Implement features from GitHub issues |
+| `/devflow:check` | Run parallel validations (tests, lint, types, build) |
+| `/devflow:review-pr` | Perform comprehensive PR reviews |
+| `/devflow:research` | Research topics before planning |
+| `/devflow:epic` | Plan major initiatives with multiple phases |
 
 ### Framework Support
 
