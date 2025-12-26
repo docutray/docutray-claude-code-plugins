@@ -1,156 +1,139 @@
-# Docutray Claude Code Plugins
+# Docutray Plugins Marketplace
 
-A collection of reusable plugins for [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) maintained by the Docutray organization. This repository provides custom slash commands and skills that can be installed and used across different projects.
-
-## About Claude Code Plugins
-
-Claude Code's plugin system extends functionality through custom commands, agents, hooks, Skills, and MCP servers that can be shared across projects and teams. Plugins organize these features in a standardized directory structure that makes them easy to discover, install, and maintain.
-
-## Repository Structure
-
-This repository follows the standard Claude Code plugin structure:
-
-```
-docutray-claude-code-plugins/
-├── .claude-plugin/
-│   └── plugin.json          # Plugin metadata and configuration
-├── commands/                # Custom slash commands
-│   ├── research.md          # Research command
-│   ├── epic.md              # Epic planning command
-│   ├── feat.md              # Feature specification command
-│   ├── dev.md               # Development implementation command
-│   ├── check.md             # Validation command
-│   ├── review-pr.md         # PR review command
-│   └── devflow-setup.md     # Setup command
-├── templates/               # Framework-specific templates
-│   ├── typescript-node/     # TypeScript/Node.js templates
-│   └── python/              # Python templates
-├── skills/                  # Agent Skills
-├── README.md                # Main documentation
-├── README-devflow.md        # DevFlow complete guide
-└── CLAUDE.md                # Claude Code guidance
-```
+A collection of [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) plugins maintained by the Docutray organization.
 
 ## Installation
 
-### From GitHub (Recommended)
+### Add the Marketplace
 
-**Step 1: Add the marketplace**
 ```bash
 /plugin marketplace add docutray/docutray-claude-code-plugins
 ```
 
-**Step 2: Install the plugin**
+### Install Plugins
+
 ```bash
-/plugin install devflow@docutray-plugins
+/plugin install <plugin-name>@docutray-plugins
 ```
 
-**Or use the interactive menu:**
+Or use the interactive menu:
 ```bash
 /plugin
-# Select "Browse Plugins" and choose devflow
+# Select "Browse Plugins" → choose from docutray-plugins
 ```
 
-### From Local Development
+## Available Plugins
 
-For testing or development:
+| Plugin | Description | Version |
+|--------|-------------|---------|
+| [devflow](./plugins/devflow/) | Complete agile development workflow with GitHub integration | 1.1.1 |
 
-**Step 1: Clone and add as marketplace**
-```bash
-git clone https://github.com/docutray/docutray-claude-code-plugins
-cd docutray-claude-code-plugins
-/plugin marketplace add .
-```
-
-**Step 2: Install**
-```bash
-/plugin install devflow@local
-```
-
-## Available Components
-
-### DevFlow - Agile Development Workflow
+## Plugin: DevFlow
 
 A comprehensive set of slash commands that implement a complete agile development workflow based on GitHub and best practices.
 
-**Quick Start**:
+### Quick Start
+
 ```bash
+# Install
+/plugin install devflow@docutray-plugins
+
 # Configure for your project
 /devflow-setup
 
 # Standard workflow
-/feat feature-name     # Create specification
-/dev issue#123        # Implement feature
-/check                # Validate quality
-/review-pr 45         # Review PR
+/feat feature-name     # Create specification & GitHub issue
+/dev issue#123         # Implement feature
+/check                 # Validate quality
+/review-pr 45          # Review PR
 ```
 
-**Commands**:
-- **`/feat`** - Create detailed feature specifications and GitHub issues
-- **`/dev`** - Implement features from issues with automated workflow
-- **`/check`** - Run parallel validations (tests, linting, type checking, build)
-- **`/review-pr`** - Perform comprehensive PR reviews
-- **`/research`** - Research topics before planning (optional)
-- **`/epic`** - Plan major initiatives with multiple phases (optional)
-- **`/devflow-setup`** - Configure DevFlow for your project
+### Commands
 
-**Framework Support**: TypeScript/Node.js, Python, Go, Ruby, Java, Rust, and more.
+| Command | Description |
+|---------|-------------|
+| `/devflow-setup` | Configure DevFlow for your project |
+| `/feat` | Create feature specifications and GitHub issues |
+| `/dev` | Implement features from GitHub issues |
+| `/check` | Run parallel validations (tests, lint, types, build) |
+| `/review-pr` | Perform comprehensive PR reviews |
+| `/research` | Research topics before planning |
+| `/epic` | Plan major initiatives with multiple phases |
 
-**[→ Read Complete DevFlow Documentation](./README-devflow.md)**
+### Framework Support
 
-### Slash Commands
+TypeScript/Node.js, Python, Go, Ruby, Java, Rust, and more.
 
-Custom slash commands are located in the `commands/` directory. Each command is a Markdown file that can include:
+[**View Full Documentation**](./plugins/devflow/README.md)
 
-- Dynamic arguments using `$ARGUMENTS`, `$1`, `$2`, etc.
-- Bash command execution with `!` prefix
-- File references using `@` syntax
-- YAML frontmatter for metadata and configuration
+## Repository Structure
 
-### Skills
+```
+docutray-claude-code-plugins/
+├── .claude-plugin/
+│   └── marketplace.json      # Marketplace catalog
+├── plugins/
+│   └── devflow/              # DevFlow plugin
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── commands/
+│       ├── templates/
+│       └── README.md
+├── README.md                 # This file
+└── CLAUDE.md
+```
 
-Agent Skills are located in the `skills/` directory. Each skill contains a `SKILL.md` file with:
+## Local Development
 
-- Name and description in YAML frontmatter
-- Specific trigger terms for automatic activation
-- Optional tool restrictions
-- Supporting documentation and resources
+```bash
+# Clone the repository
+git clone https://github.com/docutray/docutray-claude-code-plugins
+cd docutray-claude-code-plugins
 
-## Contributing
+# Add as local marketplace
+/plugin marketplace add .
 
-Contributions are welcome! When adding new plugins:
+# Install plugins
+/plugin install devflow@docutray-plugins
+```
 
-1. Follow the standard plugin structure
-2. Include clear descriptions and documentation
-3. Test thoroughly before submitting
-4. Use semantic versioning in `plugin.json`
+## Adding New Plugins
+
+1. Create a new directory under `plugins/`:
+   ```
+   plugins/new-plugin/
+   ├── .claude-plugin/
+   │   └── plugin.json
+   ├── commands/
+   └── README.md
+   ```
+
+2. Add the plugin to `marketplace.json`:
+   ```json
+   {
+     "plugins": [
+       { "name": "new-plugin", "source": "new-plugin", ... }
+     ]
+   }
+   ```
+
+3. Document the plugin in its own `README.md`
 
 ## Official Documentation
 
-For detailed information on creating and using Claude Code plugins:
-
-### Core Plugin Documentation
-- **[Plugins Overview](https://docs.claude.com/en/docs/claude-code/plugins)** - Introduction to the plugin system, installation, and management
-- **[Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)** - Detailed `plugin.json` schema and directory structure
-
-### Component Documentation
-- **[Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)** - Creating custom slash commands with arguments, bash execution, and file references
-- **[Skills](https://docs.claude.com/en/docs/claude-code/skills)** - Building Agent Skills with SKILL.md files and supporting resources
-
-### Additional Resources
-- **[Claude Code Documentation Map](https://docs.claude.com/en/docs/claude-code/claude_code_docs_map.md)** - Complete documentation index
-- **[Claude Code Overview](https://docs.claude.com/en/docs/claude-code/overview)** - Getting started with Claude Code
+- [Plugins Overview](https://docs.claude.com/en/docs/claude-code/plugins)
+- [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)
+- [Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)
+- [Skills](https://docs.claude.com/en/docs/claude-code/skills)
 
 ## License
 
-[Specify your license here]
+MIT
 
 ## Support
 
-For issues or questions:
-- Open an issue in this repository
-- Refer to the [official Claude Code documentation](https://docs.claude.com/en/docs/claude-code/overview)
-- Contact: Roberto Arce (roberto@docutray.com)
+- **Issues**: [GitHub Issues](https://github.com/docutray/docutray-claude-code-plugins/issues)
+- **Contact**: Roberto Arce (roberto@docutray.com)
 
 ---
 

@@ -4,15 +4,42 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Purpose
 
-This is a **Claude Code plugin repository** for the Docutray organization. It contains reusable slash commands and skills that can be installed across different projects. This is NOT an application codebase - it's a collection of plugin components.
+This is a **Claude Code plugin marketplace** for the Docutray organization. It contains multiple reusable plugins with slash commands and skills that can be installed across different projects. This is NOT an application codebase - it's a collection of plugin components organized as a marketplace.
+
+## Repository Structure
+
+```
+docutray-claude-code-plugins/
+├── .claude-plugin/
+│   └── marketplace.json      # Central marketplace catalog
+├── plugins/
+│   └── <plugin-name>/        # Each plugin in its own directory
+│       ├── .claude-plugin/
+│       │   └── plugin.json   # Plugin manifest
+│       ├── commands/         # Slash commands
+│       ├── skills/           # Agent skills (optional)
+│       ├── templates/        # Supporting files (optional)
+│       └── README.md         # Plugin documentation
+├── README.md                 # Marketplace documentation
+└── CLAUDE.md                 # This file
+```
 
 ## Plugin Architecture
 
-Claude Code plugins follow a standardized structure:
+### Marketplace (Root Level)
 
-- **`.claude-plugin/plugin.json`**: Required manifest file with plugin metadata, versioning, and component path configuration
-- **`commands/`**: Markdown files defining custom slash commands with optional YAML frontmatter
-- **`skills/`**: Agent Skills, each in their own directory containing a `SKILL.md` file with YAML frontmatter
+- **`.claude-plugin/marketplace.json`**: Central catalog listing all available plugins
+- Uses `metadata.pluginRoot: "./plugins"` to simplify source paths
+- Each plugin entry references its directory name under `plugins/`
+
+### Individual Plugins
+
+Each plugin follows the standard Claude Code plugin structure:
+
+- **`.claude-plugin/plugin.json`**: Plugin manifest with metadata and versioning
+- **`commands/`**: Markdown files defining slash commands with YAML frontmatter
+- **`skills/`**: Agent Skills in subdirectories with `SKILL.md` files
+- **`README.md`**: Plugin-specific documentation
 
 ### Key Concepts
 
@@ -21,52 +48,72 @@ Claude Code plugins follow a standardized structure:
 - **Skills**: Auto-activated by Claude based on context, defined in `SKILL.md` files, require specific trigger terms in descriptions for proper activation
 
 **Plugin Distribution:**
-- Plugins are installed via plugin marketplaces using `/plugin install docutray-plugins@marketplace-name`
-- Local development uses development marketplace structure
-- Semantic versioning in `plugin.json` is required for proper version management
+- Users add the marketplace: `/plugin marketplace add docutray/docutray-claude-code-plugins`
+- Users install plugins: `/plugin install <plugin-name>@docutray-plugins`
+- Semantic versioning in each plugin's `plugin.json` is required
 
 ## Working with This Repository
 
-### Adding a New Slash Command
+### Adding a New Plugin
 
-1. Create a new `.md` file in `commands/` directory
-2. Add YAML frontmatter if needed (description, allowed-tools, model)
+1. Create plugin directory: `plugins/<plugin-name>/`
+2. Create manifest: `plugins/<plugin-name>/.claude-plugin/plugin.json`
+3. Add commands in `plugins/<plugin-name>/commands/`
+4. Add skills in `plugins/<plugin-name>/skills/` (optional)
+5. Create `plugins/<plugin-name>/README.md`
+6. Register in `.claude-plugin/marketplace.json`:
+   ```json
+   {
+     "plugins": [
+       {
+         "name": "<plugin-name>",
+         "source": "<plugin-name>",
+         "description": "...",
+         "version": "1.0.0"
+       }
+     ]
+   }
+   ```
+
+### Adding a Slash Command to Existing Plugin
+
+1. Create `.md` file in `plugins/<plugin-name>/commands/`
+2. Add YAML frontmatter (description, allowed-tools, argument-hint)
 3. Write the command prompt content
-4. Test by installing plugin locally
+4. Update plugin version in `plugin.json`
 
-### Adding a New Skill
+### Adding a Skill to Existing Plugin
 
-1. Create a new directory in `skills/` (e.g., `skills/my-skill/`)
+1. Create directory: `plugins/<plugin-name>/skills/<skill-name>/`
 2. Create `SKILL.md` with required frontmatter:
    - `name`: lowercase with hyphens (max 64 chars)
-   - `description`: must include specific trigger terms (max 1024 chars)
-3. Add supporting files in the same directory if needed
-4. Test that Claude auto-activates the skill based on trigger terms
-
-### Plugin Manifest Requirements
-
-The `plugin.json` must specify:
-- `name`: Unique identifier in kebab-case
-- `version`: Semantic versioning format
-- Component paths (commands, agents, skills, hooks, mcpServers) if using non-default locations
-
-All custom paths must be relative to plugin root and start with `./`
+   - `description`: must include trigger terms (max 1024 chars)
+3. Add supporting files if needed
+4. Update plugin version in `plugin.json`
 
 ## Development Workflow
 
-Since this repository currently has no build system, linting, or testing infrastructure, development is file-based:
-
-1. Add or modify command/skill files
-2. Update `plugin.json` version if publishing changes
-3. Test by installing the plugin in a development marketplace
-4. Uninstall and reinstall to verify changes load correctly
+1. Add or modify plugin files
+2. Update plugin's `plugin.json` version
+3. Update `marketplace.json` version if needed
+4. Test locally:
+   ```bash
+   /plugin marketplace add .
+   /plugin install <plugin-name>@docutray-plugins
+   ```
+5. Uninstall and reinstall to verify changes
 
 Use `claude --debug` to troubleshoot plugin loading issues.
 
+## Current Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| `devflow` | Complete agile development workflow with GitHub integration |
+
 ## Official References
 
-Key documentation for working with plugins:
 - [Plugins Overview](https://docs.claude.com/en/docs/claude-code/plugins)
-- [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference) - `plugin.json` schema
+- [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)
 - [Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)
 - [Skills](https://docs.claude.com/en/docs/claude-code/skills)

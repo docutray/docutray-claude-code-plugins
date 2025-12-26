@@ -1,23 +1,20 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "docutray-plugins",
-  "version": "1.0.1",
   "description": "Docutray's collection of Claude Code plugins for agile development workflows",
   "owner": {
     "name": "Roberto Arce",
     "email": "roberto@docutray.com"
   },
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
   "plugins": [
     {
       "name": "devflow",
+      "source": "./devflow",
       "description": "Complete agile development workflow commands for Claude Code based on GitHub and best practices. Includes feature planning, implementation, validation, and PR review commands.",
-      "source": "./",
-      "category": "development",
-      "version": "1.0.1",
-      "author": {
-        "name": "Roberto Arce",
-        "email": "roberto@docutray.com"
-      }
+      "version": "1.1.1",
+      "category": "development"
     }
   ]
 }
