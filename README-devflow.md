@@ -91,8 +91,22 @@ For most features and fixes:
 
 1. **`/feat new-feature`** - Create feature specification and GitHub issue
 2. **`/dev issue#123`** - Implement the feature
-3. **`/check`** - Validate implementation (integrated in /dev)
+  - If OpenSpec is enabled in the repo, `/dev` generates an OpenSpec proposal from the issue at the start of the work.
+3. **`/check`** - Validate implementation
+  - If OpenSpec is enabled, `/check` can also archive the proposal as a pre-PR gate.
 4. **`/review-pr 45`** - Review and approve PR
+
+### OpenSpec-Enhanced Flow
+
+If your team uses OpenSpec for design proposals, DevFlow can incorporate it as part of the normal flow:
+
+```
+/feat → /dev (generate proposal) → /check (archive proposal) → /review-pr
+```
+
+Key rules:
+- **At dev start**: from `issue#<n>`, generate an OpenSpec proposal following your OpenSpec repo conventions.
+- **Before PR**: archive the proposal and ensure the PR references the archived location.
 
 ### Epic-Based Flow
 
@@ -211,6 +225,16 @@ Edit these files to customize for your project:
 - Environment setup
 - Development server commands
 - Testing procedures
+
+### OpenSpec
+
+If your repo uses OpenSpec, the source of truth and changes live under `openspec/`:
+- `openspec/specs/` - current specs (source of truth)
+- `openspec/changes/<change>/` - proposals + tasks + spec deltas
+
+DevFlow integrates with OpenSpec by:
+- generating a change proposal folder at the start of `/dev` (from the GitHub issue)
+- archiving the change before opening the PR (often run as part of `/check`)
 
 **`feat.md`** - Customize issue template:
 - Required sections

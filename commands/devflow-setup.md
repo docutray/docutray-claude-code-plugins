@@ -36,6 +36,7 @@ Guide the project through initial configuration of devflow commands, creating cu
 - Issue and PR templates
 - Validation criteria
 - Functional testing configuration (optional)
+- Optional OpenSpec installation and initialization
 
 ## Parameters
 
@@ -51,9 +52,10 @@ Guide the project through initial configuration of devflow commands, creating cu
 1. **Detect existing configuration**: Check if `.claude/details/commands/` already exists
 2. **Project analysis**: Analyze codebase to infer framework and structure
 3. **Interactive questions**: Ask user to confirm or provide missing information
-4. **Template generation**: Create customized detail files
-5. **Validation**: Verify generated configuration
-6. **Summary**: Show created files and next steps
+4. **Optional OpenSpec setup**: Offer to install and initialize OpenSpec in the repo
+5. **Template generation**: Create customized detail files
+6. **Validation**: Verify generated configuration
+7. **Summary**: Show created files and next steps
 
 ### Detailed Process
 
@@ -149,6 +151,17 @@ Do you want to enable automated functional/QA testing in PR reviews?
 - No, only technical validations
 - I'll configure later
 ```
+
+7. **OpenSpec** (Optional):
+```
+Do you want to enable OpenSpec (spec-driven development) in this repo?
+- Yes, install + init OpenSpec
+- No
+```
+
+If enabled, ensure:
+- Node.js meets OpenSpec requirement (currently Node.js >= 20.19.0)
+- OpenSpec CLI is installed and the repo is initialized
 
 #### 4. Template Generation
 

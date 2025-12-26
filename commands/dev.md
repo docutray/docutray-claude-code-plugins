@@ -39,6 +39,7 @@ Command to implement features based on GitHub issues, creating a development bra
 
 Implement complete features based on existing GitHub issues, following a structured development flow that includes:
 - Issue specification download and analysis
+- Optional OpenSpec proposal generation from the issue
 - Development branch creation
 - Step-by-step implementation following best practices
 - Continuous validation with tests and linting
@@ -63,10 +64,11 @@ The command has automatic access to git context (see Context section above).
 1. **State Verification**: Review git context to detect uncommitted changes
 2. **Issue Download**: Get all issue information from GitHub
 3. **Specification Analysis**: Parse and structure technical specification
-4. **Environment Preparation**: Create branch and configure development workspace
-5. **Guided Implementation**: Develop step by step following issue checklist
-6. **Continuous Validation**: Run tests and validations during development
-7. **Finalization**: Create Pull Request with complete documentation
+4. **OpenSpec Proposal (if enabled)**: Generate an OpenSpec proposal from the issue and keep it updated during development
+5. **Environment Preparation**: Create branch and configure development workspace
+6. **Guided Implementation**: Develop step by step following issue checklist
+7. **Continuous Validation**: Run tests and validations during development
+8. **Finalization**: Ensure OpenSpec proposal is archived (if enabled) and create Pull Request with complete documentation
 
 ### Detailed Process
 
@@ -87,6 +89,46 @@ gh issue view <number> --json title,body,assignees,labels,milestone,state,commen
 - Confirm it has complete technical specification
 - Validate it includes clear acceptance criteria
 - Verify it has implementation checklist
+
+#### 2. OpenSpec Proposal Generation (Optional)
+
+OpenSpec is optional and repo-specific. If the repository uses OpenSpec, `/dev` must generate a proposal from the issue **before starting implementation**.
+
+**How to detect OpenSpec**
+
+Treat OpenSpec as enabled when the repo contains an OpenSpec workspace, typically:
+- `openspec/specs/` and/or
+- `openspec/changes/`
+
+Optionally verify the CLI is available:
+```bash
+command -v openspec
+openspec --version
+```
+
+If the `openspec/` directory exists but the CLI is missing, ask the user to run OpenSpec installation (see `/devflow-setup`).
+
+**What to do when enabled**
+
+1. Derive a deterministic change folder name from the GitHub issue so `/check` can later archive it without extra input:
+  - Recommended: `issue-<number>-<title-slug>`
+2. Create (or update) the OpenSpec change folder:
+  - `openspec/changes/<change>/proposal.md`
+  - `openspec/changes/<change>/tasks.md`
+  - Optional: `openspec/changes/<change>/design.md`
+  - Spec deltas under: `openspec/changes/<change>/specs/.../spec.md` when needed
+3. Ensure the proposal references the GitHub issue (`#<number>`) and captures intent before implementation.
+4. Build `tasks.md` from the issue checklist and acceptance criteria.
+5. Validate the change folder format:
+  ```bash
+  openspec validate <change>
+  openspec show <change>
+  ```
+
+**Minimum expected output**
+
+- A single proposal document created in the configured proposal directory.
+- The proposal includes a clear "Status" (e.g., Draft) and a link/reference to the issue.
 
 #### 2. Development Environment Preparation
 
@@ -198,6 +240,20 @@ pytest tests/
 # (project-specific command from details file)
 ```
 
+**OpenSpec Archiving Gate (if enabled)**
+
+If OpenSpec is enabled (based on the presence of `openspec/`), ensure that the change has been archived **before creating the PR**.
+
+- Preferred: run `/check` with an OpenSpec archive validation configured in `.claude/details/commands/check.md`.
+- Otherwise, archive directly:
+  ```bash
+  openspec archive <change> --yes
+  ```
+
+The PR must reference:
+- The proposal path (draft location) and/or
+- The archived proposal path (final location), depending on team convention
+
 **Pull Request Preparation**
 - Generate description based on implemented issue
 - Include summary of changes made
@@ -216,6 +272,9 @@ gh pr create \
   --body "$(cat <<'EOF'
 ## 🔗 Related Issue
 Closes #<number>
+
+## 📄 OpenSpec Proposal
+[Link or path to proposal + archived proposal]
 
 ## 📋 Changes Summary
 [Description of implemented changes]

@@ -29,6 +29,9 @@ Execute all critical project validations in parallel:
 - 📝 **Type Checking**: Validate types (language-specific)
 - 🏗️ **Build**: Compile complete project (optional with --fast)
 
+Optional (repo-specific):
+- 📄 **OpenSpec**: Validate and/or archive an OpenSpec change before opening a PR
+
 **Note**: Specific commands are configured per project in `.claude/details/commands/check.md`
 
 ## Instructions for Claude
@@ -78,6 +81,35 @@ This file must define:
   }
 }
 ```
+
+### OpenSpec integration (optional)
+
+If the repo uses OpenSpec (i.e., it has an `openspec/` directory), you can include OpenSpec as validations in `.claude/details/commands/check.md`.
+
+Common pattern: derive the change name from the current branch and run `openspec validate` and/or `openspec archive`.
+
+Example validations:
+
+```json
+{
+  "validations": {
+    "openspec_validate": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec validate $CHANGE",
+      "description": "Validate OpenSpec change format for current branch",
+      "enabled": false
+    },
+    "openspec_archive": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec archive $CHANGE --yes",
+      "description": "Archive OpenSpec change (pre-PR gate)",
+      "enabled": false
+    }
+  }
+}
+```
+
+Notes:
+- This assumes your branch name (suffix) matches the change folder name under `openspec/changes/`.
+- If your team uses a different naming convention, set `command` accordingly.
 
 **Framework Examples**:
 

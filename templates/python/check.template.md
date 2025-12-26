@@ -83,6 +83,16 @@ You can add custom validations:
 {
   "validations": {
     "...": "...",
+    "openspec_validate": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec validate $CHANGE",
+      "description": "OpenSpec: validate current change folder",
+      "enabled": false
+    },
+    "openspec_archive": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec archive $CHANGE --yes",
+      "description": "OpenSpec: archive current change (pre-PR gate)",
+      "enabled": false
+    },
     "security": {
       "command": "bandit -r . -ll",
       "description": "Security vulnerability scan",
