@@ -1,0 +1,20 @@
+{
+  "name": "rag-research",
+  "description": "RAG-based reference document management for research. Index documents (PDF, Markdown, Text) and search them semantically to find relevant information for research topics. Uses Qdrant + FastEmbed for efficient local vector storage and retrieval.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Docutray"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/docutray/docutray-claude-code-plugins"
+  },
+  "keywords": [
+    "rag",
+    "vector-search",
+    "document-indexing",
+    "research",
+    "qdrant",
+    "fastembed"
+  ]
+}
