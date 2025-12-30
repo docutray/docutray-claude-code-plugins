@@ -1,5 +1,16 @@
 # RAG Research Configuration
 
+## Database Location
+
+By default, the database is stored in `.rag-research/` within your current project directory. This provides project-isolated document indexes.
+
+**Priority order:**
+1. `RAG_RESEARCH_DB_PATH` environment variable (if set)
+2. `<project>/.rag-research/` (project-local, default)
+3. `~/.rag-research/` (fallback if no project context)
+
+The `.rag-research/` directory is automatically added to your project's `.gitignore`.
+
 ## Environment Variables
 
 Create a `.env` file in the plugin directory or set these environment variables:
@@ -8,8 +19,8 @@ Create a `.env` file in the plugin directory or set these environment variables:
 # Required for PDF OCR (optional - falls back to pypdf)
 MISTRAL_API_KEY="your-mistral-api-key"
 
-# Database path (default: ~/.rag-research)
-RAG_RESEARCH_DB_PATH="/custom/path/to/db"
+# Override database path (default: project-local .rag-research/)
+RAG_RESEARCH_DB_PATH=""
 
 # Embedding model (default: BAAI/bge-small-en-v1.5)
 EMBEDDING_MODEL="BAAI/bge-small-en-v1.5"
@@ -82,8 +93,20 @@ rm -rf ~/.rag-research
 ```
 
 ### Multiple Projects
-Use `RAG_RESEARCH_DB_PATH` to maintain separate databases:
+
+Each project automatically gets its own database in `.rag-research/`. Simply run commands from different project directories:
+
 ```bash
-RAG_RESEARCH_DB_PATH=./project-a-vectors uv run rag-research add --file doc.pdf
-RAG_RESEARCH_DB_PATH=./project-b-vectors uv run rag-research add --file other.pdf
+# In project A - uses project-a/.rag-research/
+cd /path/to/project-a
+/rag-research:add-doc ./doc.pdf
+
+# In project B - uses project-b/.rag-research/
+cd /path/to/project-b
+/rag-research:add-doc ./other.pdf
+```
+
+To share a database across projects, use `RAG_RESEARCH_DB_PATH`:
+```bash
+RAG_RESEARCH_DB_PATH=/shared/vectors uv run rag-research add --file doc.pdf
 ```

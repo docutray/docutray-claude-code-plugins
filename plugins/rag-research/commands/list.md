@@ -10,19 +10,19 @@ List all documents that have been indexed in the RAG Research database. Optional
 
 ## Instructions
 
-1. Run the list command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research list`
-2. If a filter term is provided: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research list --filter "$ARGUMENTS"`
+1. Run the list command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" list`
+2. If a filter term is provided: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" list --filter "$ARGUMENTS"`
 3. Display the results in a clear format
 
 ## Command Examples
 
 ```bash
 # List all documents
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research list
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" list
 
 # Filter by keyword
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research list --filter "mistral"
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research list --filter "pdf"
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" list --filter "mistral"
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" list --filter "pdf"
 ```
 
 ## Output Format
@@ -39,4 +39,4 @@ The command displays:
 
 - `/rag-research:list` - Show all indexed documents
 - `/rag-research:list mistral` - Show documents with "mistral" in title/path
-- `/rag-research:list awp` - Show AWP-related documents
+- `/rag-research:list pdf` - Show PDF documents

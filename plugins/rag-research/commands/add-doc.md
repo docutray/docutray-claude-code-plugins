@@ -18,21 +18,21 @@ Index a document into the RAG Research database. The document will be chunked, e
 ## Instructions
 
 1. Verify the file exists and is a supported type
-2. Run the add command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research add --file "$ARGUMENTS"`
-3. For custom title: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research add --file "$ARGUMENTS" --title "Custom Title"`
+2. Run the add command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" add --file "$ARGUMENTS"`
+3. For custom title: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" add --file "$ARGUMENTS" --title "Custom Title"`
 4. Report the document ID and indexing details
 
 ## Command Examples
 
 ```bash
 # Add a PDF document
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research add --file "/path/to/guide.pdf"
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" add --file "/path/to/guide.pdf"
 
 # Add with custom title
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research add --file "./notes.md" --title "Research Notes"
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" add --file "./notes.md" --title "Research Notes"
 
 # Add without Mistral OCR (use pypdf for PDFs)
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research add --file "./doc.pdf" --no-ocr
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" add --file "./doc.pdf" --no-ocr
 ```
 
 ## Processing Details

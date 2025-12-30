@@ -15,9 +15,18 @@ from .rag_manager import RAGManager
 from .document_loader import DocumentLoader
 
 
-def get_manager() -> RAGManager:
-    """Get configured RAG manager instance."""
-    db_path = os.getenv("RAG_RESEARCH_DB_PATH") or None
+def get_manager(project_dir: str = None) -> RAGManager:
+    """Get configured RAG manager instance with project-local database.
+
+    Priority: RAG_RESEARCH_DB_PATH env var > project_dir/.rag-research > ~/.rag-research
+    """
+    # Check for explicit env var first
+    db_path = os.getenv("RAG_RESEARCH_DB_PATH")
+
+    # If no env var and project_dir provided, use project-local database
+    if not db_path and project_dir:
+        db_path = str(Path(project_dir) / ".rag-research")
+
     model = os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
     chunk_size = int(os.getenv("CHUNK_SIZE", "512"))
     chunk_overlap = int(os.getenv("CHUNK_OVERLAP", "50"))
@@ -32,7 +41,7 @@ def get_manager() -> RAGManager:
 
 def cmd_list(args):
     """List indexed documents."""
-    manager = get_manager()
+    manager = get_manager(args.project_dir)
     docs = manager.list_documents(filter_term=args.filter)
     stats = manager.get_stats()
 
@@ -93,7 +102,7 @@ def cmd_add(args):
     title = args.title or loader.get_title_from_file(file_path)
 
     # Add to index
-    manager = get_manager()
+    manager = get_manager(args.project_dir)
     try:
         doc_id = manager.add_document(
             text=text,
@@ -123,7 +132,7 @@ def cmd_add(args):
 
 def cmd_remove(args):
     """Remove a document from the index."""
-    manager = get_manager()
+    manager = get_manager(args.project_dir)
 
     if manager.remove_document(args.id):
         print(f"Document {args.id} removed successfully.")
@@ -140,7 +149,7 @@ def cmd_research(args):
         print("Error: Please provide a search query")
         sys.exit(1)
 
-    manager = get_manager()
+    manager = get_manager(args.project_dir)
     stats = manager.get_stats()
 
     if stats["total_documents"] == 0:
@@ -222,7 +231,7 @@ def cmd_research(args):
 
 def cmd_stats(args):
     """Show database statistics."""
-    manager = get_manager()
+    manager = get_manager(args.project_dir)
     stats = manager.get_stats()
 
     print("\n" + "=" * 50)
@@ -249,6 +258,13 @@ Examples:
   rag-research remove --id abc123      # Remove a document
   rag-research stats                   # Show statistics
         """,
+    )
+
+    # Global argument for project directory (project-local database)
+    parser.add_argument(
+        "--project-dir", "-p",
+        help="Project directory for local database storage. When specified, uses <project-dir>/.rag-research/ for storage. If not specified, falls back to ~/.rag-research/",
+        default=None,
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")

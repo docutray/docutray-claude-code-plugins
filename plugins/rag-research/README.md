@@ -34,7 +34,7 @@ uv sync
 
 - **Document Indexing**: PDF, Markdown, Text, JSON support
 - **Semantic Search**: FastEmbed embeddings + Qdrant vector store
-- **Local Storage**: No external servers required (~100MB dependencies)
+- **Project-Local Storage**: Database stored in `.rag-research/` per project (auto-added to `.gitignore`)
 - **PDF OCR**: Mistral AI integration for scanned documents
 - **Deep Research**: Autonomous agent for comprehensive topic research
 - **Configurable**: Customizable chunking, models, and database location
@@ -84,6 +84,17 @@ uv run rag-research remove --id <doc_id>
 
 ## Configuration
 
+### Database Location
+
+By default, the database is stored in `.rag-research/` within your current project directory. This allows each project to have its own isolated document index.
+
+**Priority order:**
+1. `RAG_RESEARCH_DB_PATH` environment variable (if set)
+2. `<project>/.rag-research/` (project-local, default)
+3. `~/.rag-research/` (fallback if no project context)
+
+The `.rag-research/` directory is automatically added to your project's `.gitignore`.
+
 ### Environment Variables
 
 Create `.env` in the plugin directory:
@@ -92,8 +103,8 @@ Create `.env` in the plugin directory:
 # PDF OCR (optional - falls back to pypdf)
 MISTRAL_API_KEY="your-mistral-api-key"
 
-# Database location (default: ~/.rag-research)
-RAG_RESEARCH_DB_PATH="/custom/path"
+# Override database location (default: project-local .rag-research/)
+RAG_RESEARCH_DB_PATH=""
 
 # Embedding model (default: BAAI/bge-small-en-v1.5)
 EMBEDDING_MODEL="BAAI/bge-small-en-v1.5"
@@ -145,8 +156,12 @@ Create `.claude/rag-research.local.md` for project-specific configuration.
 
 ### Database Reset
 ```bash
-rm -rf ~/.rag-research
+# For project-local database
+rm -rf .rag-research
 # Database reinitializes on next command
+
+# For global database (if using RAG_RESEARCH_DB_PATH)
+rm -rf ~/.rag-research
 ```
 
 ## License

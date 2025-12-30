@@ -17,22 +17,22 @@ Search your indexed reference documents using semantic similarity to find releva
 
 ## Instructions
 
-1. Run the research command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research $ARGUMENTS`
-2. For more results: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research $ARGUMENTS --limit 20`
-3. For JSON output (easier parsing): `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research $ARGUMENTS --json`
+1. Run the research command: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research $ARGUMENTS`
+2. For more results: `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research $ARGUMENTS --limit 20`
+3. For JSON output (easier parsing): `uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research $ARGUMENTS --json`
 4. Analyze the results and synthesize findings for the user
 
 ## Command Examples
 
 ```bash
 # Basic research query
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research "advanced work packaging methodology"
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research "document text extraction methods"
 
 # Get more results
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research "OCR document processing" --limit 20
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research "OCR document processing" --limit 20
 
 # JSON output for detailed analysis
-uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research research "project management best practices" --json
+uv run --directory ${CLAUDE_PLUGIN_ROOT} rag-research --project-dir "$PWD" research "project management best practices" --json
 ```
 
 ## Understanding Results
@@ -77,9 +77,8 @@ Present findings as:
 
 ## Usage Scenarios
 
-- `/rag-research:research advanced work packaging implementation`
 - `/rag-research:research mistral ocr api usage`
-- `/rag-research:research project scheduling techniques`
+- `/rag-research:research PDF text extraction techniques`
 - `/rag-research:research document extraction methods`
 
 ## Tips for Better Results

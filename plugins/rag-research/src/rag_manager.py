@@ -75,6 +75,9 @@ class RAGManager:
         self.db_path = Path(db_path) if db_path else Path.home() / ".rag-research"
         self.db_path.mkdir(parents=True, exist_ok=True)
 
+        # Ensure .gitignore is updated for project-local databases
+        self._ensure_gitignore()
+
         self.embedding_model_name = embedding_model
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
@@ -123,6 +126,42 @@ class RAGManager:
     def _save_metadata(self) -> None:
         """Save documents metadata to disk."""
         self.metadata_path.write_text(json.dumps(self._documents_metadata, indent=2))
+
+    def _ensure_gitignore(self) -> None:
+        """Ensure .rag-research is in project's .gitignore for project-local databases.
+
+        Only updates .gitignore when:
+        - The database is in a project directory (not ~/.rag-research)
+        - The .rag-research entry is not already present
+        """
+        # Skip if using global database in home directory
+        home_rag_path = Path.home() / ".rag-research"
+        if self.db_path == home_rag_path or str(self.db_path).startswith(str(home_rag_path)):
+            return
+
+        # Project root is the parent of .rag-research
+        project_root = self.db_path.parent
+        gitignore_path = project_root / ".gitignore"
+
+        entry = ".rag-research/"
+
+        try:
+            if gitignore_path.exists():
+                content = gitignore_path.read_text()
+                # Check if entry already exists (with or without trailing /)
+                if ".rag-research" in content:
+                    return
+                # Append to existing .gitignore
+                with gitignore_path.open("a") as f:
+                    if not content.endswith("\n"):
+                        f.write("\n")
+                    f.write(f"\n# RAG Research local database\n{entry}\n")
+            else:
+                # Create new .gitignore
+                gitignore_path.write_text(f"# RAG Research local database\n{entry}\n")
+        except (PermissionError, OSError):
+            # Silently ignore permission errors - user can manually update .gitignore
+            pass
 
     def _ensure_collection(self) -> None:
         """Ensure the vector collection exists."""

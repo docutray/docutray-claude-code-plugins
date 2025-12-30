@@ -16,8 +16,8 @@
         {
             "name": "rag-research",
             "source": "./plugins/rag-research",
-            "description": "RAG-based reference document management for research. Index documents (PDF, Markdown, Text) and search them semantically using Qdrant + FastEmbed for efficient local vector storage and retrieval.",
-            "version": "1.0.2",
+            "description": "RAG-based reference document management for research. Index documents (PDF, Markdown, Text) and search them semantically using Qdrant + FastEmbed for efficient local vector storage and retrieval. Project-local database support.",
+            "version": "1.1.1",
             "category": "research"
         }
     ]
