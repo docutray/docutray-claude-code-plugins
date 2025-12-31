@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file.
 
 This project follows Semantic Versioning.
 
+## [1.1.5] - 2025-12-31
+
+### Changed (devflow)
+- `/dev` command now uses OpenSpec slash commands instead of CLI commands:
+  - `/openspec:proposal issue#<number>` to generate proposal from GitHub issue
+  - `/openspec:apply <change>` to guide implementation following the spec
+  - `/openspec:archive <change>` to archive specs before creating PR
+- Updated implementation flow documentation to reflect new OpenSpec integration
+
+## [1.1.4] - 2025-12-30
+
+### Added
+- **rag-research** plugin (v1.1.1): RAG-based reference document management
+  - Semantic search across indexed documents (PDF, Markdown, Text)
+  - Uses Qdrant + FastEmbed for local vector storage
+  - Project-local database support
+  - Commands: `/rag-research:add-doc`, `/rag-research:research`, `/rag-research:list`
+
 ## [1.1.1] - 2025-12-26
 
 ### Fixed

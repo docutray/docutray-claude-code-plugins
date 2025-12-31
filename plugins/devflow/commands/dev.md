@@ -64,11 +64,11 @@ The command has automatic access to git context (see Context section above).
 1. **State Verification**: Review git context to detect uncommitted changes
 2. **Issue Download**: Get all issue information from GitHub
 3. **Specification Analysis**: Parse and structure technical specification
-4. **OpenSpec Proposal (if enabled)**: Generate an OpenSpec proposal from the issue and keep it updated during development
+4. **OpenSpec Proposal (if enabled)**: Use `/openspec:proposal issue#<number>` to generate proposal from the issue
 5. **Environment Preparation**: Create branch and configure development workspace
-6. **Guided Implementation**: Develop step by step following issue checklist
+6. **Guided Implementation**: Use `/openspec:apply <change>` (if enabled) to develop step by step following the spec
 7. **Continuous Validation**: Run tests and validations during development
-8. **Finalization**: Ensure OpenSpec proposal is archived (if enabled) and create Pull Request with complete documentation
+8. **Finalization**: Use `/openspec:archive <change>` (if enabled) to archive the spec, then create Pull Request
 
 ### Detailed Process
 
@@ -100,30 +100,28 @@ Treat OpenSpec as enabled when the repo contains an OpenSpec workspace, typicall
 - `openspec/specs/` and/or
 - `openspec/changes/`
 
-Optionally verify the CLI is available:
-```bash
-command -v openspec
-openspec --version
-```
+Additionally, check if OpenSpec slash commands are available (installed via OpenSpec Claude Code plugin).
 
-If the `openspec/` directory exists but the CLI is missing, ask the user to run OpenSpec installation (see `/devflow-setup`).
+If the `openspec/` directory exists but the commands are not available, ask the user to install the OpenSpec plugin (see `/devflow-setup`).
 
 **What to do when enabled**
 
-1. Derive a deterministic change folder name from the GitHub issue so `/check` can later archive it without extra input:
-  - Recommended: `issue-<number>-<title-slug>`
-2. Create (or update) the OpenSpec change folder:
-  - `openspec/changes/<change>/proposal.md`
-  - `openspec/changes/<change>/tasks.md`
-  - Optional: `openspec/changes/<change>/design.md`
-  - Spec deltas under: `openspec/changes/<change>/specs/.../spec.md` when needed
-3. Ensure the proposal references the GitHub issue (`#<number>`) and captures intent before implementation.
-4. Build `tasks.md` from the issue checklist and acceptance criteria.
-5. Validate the change folder format:
-  ```bash
-  openspec validate <change>
-  openspec show <change>
-  ```
+Use the `/openspec:proposal` slash command to generate the proposal directly from the GitHub issue:
+
+```
+/openspec:proposal issue#<number>
+```
+
+This command will:
+1. Derive a deterministic change folder name from the GitHub issue (e.g., `issue-<number>-<title-slug>`)
+2. Create the OpenSpec change folder structure:
+   - `openspec/changes/<change>/proposal.md`
+   - `openspec/changes/<change>/tasks.md`
+   - Optional: `openspec/changes/<change>/design.md`
+   - Spec deltas under: `openspec/changes/<change>/specs/.../spec.md` when needed
+3. Ensure the proposal references the GitHub issue (`#<number>`) and captures intent
+4. Build `tasks.md` from the issue checklist and acceptance criteria
+5. Validate the change folder format automatically
 
 **Minimum expected output**
 
@@ -189,6 +187,20 @@ npm ci
 - Identify optimal implementation order
 - Plan intermediate validations
 
+**OpenSpec-Guided Implementation (if enabled)**
+
+When OpenSpec is enabled, use the `/openspec:apply` slash command to guide the implementation:
+
+```
+/openspec:apply <change-name>
+```
+
+This command will:
+1. Read the proposal and tasks from the change folder
+2. Guide step-by-step implementation following the tasks.md checklist
+3. Update task status as items are completed
+4. Maintain consistency between implementation and spec
+
 **Incremental Development**
 - Implement one task at a time from checklist
 - Run relevant tests after each change
@@ -244,11 +256,19 @@ pytest tests/
 
 If OpenSpec is enabled (based on the presence of `openspec/`), ensure that the change has been archived **before creating the PR**.
 
-- Preferred: run `/check` with an OpenSpec archive validation configured in `.claude/details/commands/check.md`.
-- Otherwise, archive directly:
-  ```bash
-  openspec archive <change> --yes
-  ```
+Use the `/openspec:archive` slash command to archive the change:
+
+```
+/openspec:archive <change-name>
+```
+
+Where `<change-name>` is the change folder created during proposal generation (e.g., `issue-<number>-<title-slug>`).
+
+This command will:
+1. Validate the change folder is complete
+2. Move specs from `openspec/changes/<change>/specs/` to the main `openspec/specs/` directory
+3. Archive the proposal and update status
+4. Clean up the change folder
 
 The PR must reference:
 - The proposal path (draft location) and/or
