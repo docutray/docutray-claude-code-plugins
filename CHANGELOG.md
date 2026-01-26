@@ -4,6 +4,31 @@ All notable changes to this project are documented in this file.
 
 This project follows Semantic Versioning.
 
+## [1.2.0] - 2025-01-26
+
+### Changed (devflow)
+- **BREAKING**: Migrated from legacy OpenSpec commands to OPSX (fluid workflow)
+- `/dev` command now uses OPSX slash commands:
+  - `/opsx:new` or `/opsx:ff` to create planning artifacts from GitHub issue
+  - `/opsx:apply <change>` to guide implementation following tasks
+  - `/opsx:verify <change>` to validate implementation against specs
+  - `/opsx:sync <change>` to preview spec merge
+  - `/opsx:archive <change>` to finalize change before creating PR
+- Updated OPSX detection: now checks for `openspec/config.yaml` (primary) or legacy directories
+- Added support for discrete artifact workflow (proposal -> specs -> design -> tasks)
+- `/devflow-setup` now includes full OPSX setup instructions:
+  - `npm install -g openspec`
+  - `openspec init` + `openspec experimental`
+  - Lists all available OPSX commands
+- `/check` updated with new OPSX validation commands (`openspec status`, `openspec workflow verify`)
+
+### Added (devflow)
+- Three OPSX workflow options in `/dev`:
+  - Fast-forward (`/opsx:ff`) for well-defined issues
+  - Incremental (`/opsx:new` + `/opsx:continue`) for exploratory work
+  - Exploration first (`/opsx:explore`) for brainstorming
+- Verification step (`/opsx:verify`) before archiving in `/dev` workflow
+
 ## [1.1.5] - 2025-12-31
 
 ### Changed (devflow)

@@ -130,31 +130,44 @@ flowchart TB
 
 ---
 
-## 6. Integración con OpenSpec
+## 6. Integración con OPSX (OpenSpec)
 
 ```mermaid
 flowchart LR
-    subgraph "DevFlow + OpenSpec"
+    subgraph "DevFlow + OPSX"
         A[Issue GitHub] --> B["/devflow:dev"]
-        B --> C["📄 Genera Proposal<br/>(OpenSpec)"]
-        C --> D["👀 Review<br/>propuesta"]
-        D --> E["⌨️ Implementar<br/>según spec"]
-        E --> F["📦 Archive<br/>proposal"]
+        B --> C["/opsx:ff<br/>📄 Planning artifacts"]
+        C --> D["/opsx:apply<br/>⌨️ Implementar"]
+        D --> E["/opsx:verify<br/>✅ Validar"]
+        E --> F["/opsx:archive<br/>📦 Finalizar"]
         F --> G["🔀 Crear PR"]
     end
 
-    subgraph "Specs como documentación viva"
-        H[".openspec/<br/>proposals/"]
-        I[".openspec/<br/>archive/"]
+    subgraph "Artifacts (spec-driven)"
+        H["proposal.md"]
+        I["specs/"]
+        J["design.md"]
+        K["tasks.md"]
     end
 
-    C --> H
-    F --> I
+    subgraph "Estructura"
+        L["openspec/<br/>changes/<change>/"]
+        M["openspec/<br/>specs/"]
+    end
+
+    C --> L
+    L --> H
+    L --> I
+    L --> J
+    L --> K
+    F --> M
 
     style C fill:#f39c12
+    style D fill:#4ecdc4
+    style E fill:#3498db
     style F fill:#f39c12
-    style H fill:#ecf0f1
-    style I fill:#ecf0f1
+    style L fill:#ecf0f1
+    style M fill:#2ecc71
 ```
 
 ---
@@ -198,7 +211,7 @@ flowchart TB
 
 1. **Diagrama 2** (Flujo con DevFlow): Ideal como imagen principal del post
 2. **Diagrama 4** (/check paralelo): Explica visualmente la eficiencia
-3. **Diagrama 6** (OpenSpec): Para la sección de "siguiente nivel"
+3. **Diagrama 6** (OPSX): Para la sección de "siguiente nivel" - muestra el flujo de artifacts
 4. **Diagrama 7** (Antes/Después): Buen cierre visual
 
 ### Para personalizar en Excalidraw:

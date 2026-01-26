@@ -129,14 +129,14 @@ You can add custom validations:
 {
   "validations": {
     "...": "...",
-    "openspec_validate": {
-      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec validate $CHANGE",
-      "description": "OpenSpec: validate current change folder",
+    "opsx_status": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec status --change $CHANGE",
+      "description": "OPSX: check current change status",
       "enabled": false
     },
-    "openspec_archive": {
-      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec archive $CHANGE --yes",
-      "description": "OpenSpec: archive current change (pre-PR gate)",
+    "opsx_verify": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec workflow verify $CHANGE",
+      "description": "OPSX: verify implementation matches specs (pre-PR gate)",
       "enabled": false
     },
     "coverage": {

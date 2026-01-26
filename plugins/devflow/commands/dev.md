@@ -39,7 +39,7 @@ Command to implement features based on GitHub issues, creating a development bra
 
 Implement complete features based on existing GitHub issues, following a structured development flow that includes:
 - Issue specification download and analysis
-- Optional OpenSpec proposal generation from the issue
+- Optional OPSX workflow (spec-driven development with discrete artifacts)
 - Development branch creation
 - Step-by-step implementation following best practices
 - Continuous validation with tests and linting
@@ -64,11 +64,11 @@ The command has automatic access to git context (see Context section above).
 1. **State Verification**: Review git context to detect uncommitted changes
 2. **Issue Download**: Get all issue information from GitHub
 3. **Specification Analysis**: Parse and structure technical specification
-4. **OpenSpec Proposal (if enabled)**: Use `/openspec:proposal issue#<number>` to generate proposal from the issue
+4. **OPSX Planning (if enabled)**: Use `/opsx:new` or `/opsx:ff` to create change artifacts from the issue
 5. **Environment Preparation**: Create branch and configure development workspace
-6. **Guided Implementation**: Use `/openspec:apply <change>` (if enabled) to develop step by step following the spec
+6. **Guided Implementation**: Use `/opsx:apply <change>` (if enabled) to develop step by step following the tasks
 7. **Continuous Validation**: Run tests and validations during development
-8. **Finalization**: Use `/openspec:archive <change>` (if enabled) to archive the spec, then create Pull Request
+8. **Verification & Finalization**: Use `/opsx:verify`, `/opsx:sync`, and `/opsx:archive` (if enabled), then create Pull Request
 
 ### Detailed Process
 
@@ -90,43 +90,66 @@ gh issue view <number> --json title,body,assignees,labels,milestone,state,commen
 - Validate it includes clear acceptance criteria
 - Verify it has implementation checklist
 
-#### 2. OpenSpec Proposal Generation (Optional)
+#### 2. OPSX Planning (Optional)
 
-OpenSpec is optional and repo-specific. If the repository uses OpenSpec, `/dev` must generate a proposal from the issue **before starting implementation**.
+OPSX (OpenSpec fluid workflow) is optional and repo-specific. If the repository uses OpenSpec/OPSX, `/dev` must generate planning artifacts from the issue **before starting implementation**.
 
-**How to detect OpenSpec**
+**How to detect OPSX**
 
-Treat OpenSpec as enabled when the repo contains an OpenSpec workspace, typically:
-- `openspec/specs/` and/or
-- `openspec/changes/`
+Treat OPSX as enabled when the repo contains:
+- `openspec/config.yaml` (primary indicator for OPSX)
+- Or legacy: `openspec/specs/` and/or `openspec/changes/`
 
-Additionally, check if OpenSpec slash commands are available (installed via OpenSpec Claude Code plugin).
+Additionally, check if OPSX slash commands are available (installed via OpenSpec CLI with `openspec experimental`).
 
-If the `openspec/` directory exists but the commands are not available, ask the user to install the OpenSpec plugin (see `/devflow-setup`).
+If the `openspec/` directory exists but the commands are not available, ask the user to install OpenSpec (see `/devflow-setup`).
 
 **What to do when enabled**
 
-Use the `/openspec:proposal` slash command to generate the proposal directly from the GitHub issue:
+Use OPSX slash commands to create planning artifacts from the GitHub issue:
 
+**Option A: Fast-forward (recommended for well-defined issues)**
 ```
-/openspec:proposal issue#<number>
+/opsx:ff issue#<number>
 ```
+This creates all planning artifacts at once: proposal → specs → design → tasks
 
-This command will:
-1. Derive a deterministic change folder name from the GitHub issue (e.g., `issue-<number>-<title-slug>`)
-2. Create the OpenSpec change folder structure:
-   - `openspec/changes/<change>/proposal.md`
-   - `openspec/changes/<change>/tasks.md`
-   - Optional: `openspec/changes/<change>/design.md`
-   - Spec deltas under: `openspec/changes/<change>/specs/.../spec.md` when needed
-3. Ensure the proposal references the GitHub issue (`#<number>`) and captures intent
-4. Build `tasks.md` from the issue checklist and acceptance criteria
-5. Validate the change folder format automatically
+**Option B: Incremental (for exploratory work)**
+```
+/opsx:new issue#<number>
+```
+Then use `/opsx:continue <change>` to create artifacts one at a time based on dependency readiness.
+
+**Option C: Exploration first**
+```
+/opsx:explore issue#<number>
+```
+Brainstorm without structured output, then proceed with `/opsx:new`.
+
+**Artifact structure (spec-driven schema)**
+
+OPSX creates discrete artifacts with dependencies:
+1. **proposal** — Change proposal (root, no dependencies)
+2. **specs** — Specifications (requires proposal)
+3. **design** — Technical design (requires proposal)
+4. **tasks** — Implementation tasks (requires specs and design)
+
+Change folder structure:
+```
+openspec/changes/<change>/
+├── .openspec.yaml        # Change metadata
+├── proposal.md           # Change proposal
+├── specs/                # Delta specs (merged on archive)
+│   └── .../spec.md
+├── design.md             # Technical design (optional)
+└── tasks.md              # Implementation checklist
+```
 
 **Minimum expected output**
 
-- A single proposal document created in the configured proposal directory.
-- The proposal includes a clear "Status" (e.g., Draft) and a link/reference to the issue.
+- A proposal artifact created in the change folder
+- The proposal references the GitHub issue (`#<number>`) and captures intent
+- Tasks.md built from issue checklist and acceptance criteria (if using `/opsx:ff`)
 
 #### 2. Development Environment Preparation
 
@@ -187,19 +210,25 @@ npm ci
 - Identify optimal implementation order
 - Plan intermediate validations
 
-**OpenSpec-Guided Implementation (if enabled)**
+**OPSX-Guided Implementation (if enabled)**
 
-When OpenSpec is enabled, use the `/openspec:apply` slash command to guide the implementation:
+When OPSX is enabled, use the `/opsx:apply` slash command to guide the implementation:
 
 ```
-/openspec:apply <change-name>
+/opsx:apply <change-name>
 ```
 
 This command will:
-1. Read the proposal and tasks from the change folder
+1. Read the proposal, specs, design, and tasks from the change folder
 2. Guide step-by-step implementation following the tasks.md checklist
 3. Update task status as items are completed
-4. Maintain consistency between implementation and spec
+4. Maintain consistency between implementation and specs
+
+**Verify implementation against specs:**
+```
+/opsx:verify <change-name>
+```
+Use this periodically to validate that implementation matches the specifications.
 
 **Incremental Development**
 - Implement one task at a time from checklist
@@ -252,21 +281,32 @@ pytest tests/
 # (project-specific command from details file)
 ```
 
-**OpenSpec Archiving Gate (if enabled)**
+**OPSX Verification and Archiving Gate (if enabled)**
 
-If OpenSpec is enabled (based on the presence of `openspec/`), ensure that the change has been archived **before creating the PR**.
+If OPSX is enabled (based on the presence of `openspec/config.yaml` or `openspec/`), ensure verification and archiving **before creating the PR**.
 
-Use the `/openspec:archive` slash command to archive the change:
-
+**Step 1: Verify implementation**
 ```
-/openspec:archive <change-name>
+/opsx:verify <change-name>
+```
+Validates that implementation matches the specifications.
+
+**Step 2: Preview spec sync**
+```
+/opsx:sync <change-name>
+```
+Preview how delta specs will merge into the main `openspec/specs/` directory.
+
+**Step 3: Archive the change**
+```
+/opsx:archive <change-name>
 ```
 
-Where `<change-name>` is the change folder created during proposal generation (e.g., `issue-<number>-<title-slug>`).
+Where `<change-name>` is the change folder created during planning (e.g., `issue-<number>-<title-slug>`).
 
 This command will:
 1. Validate the change folder is complete
-2. Move specs from `openspec/changes/<change>/specs/` to the main `openspec/specs/` directory
+2. Merge delta specs from `openspec/changes/<change>/specs/` to `openspec/specs/`
 3. Archive the proposal and update status
 4. Clean up the change folder
 
@@ -293,8 +333,10 @@ gh pr create \
 ## 🔗 Related Issue
 Closes #<number>
 
-## 📄 OpenSpec Proposal
-[Link or path to proposal + archived proposal]
+## 📄 OPSX Change (if enabled)
+- **Change folder**: `openspec/changes/<change-name>/`
+- **Proposal**: [Link to proposal.md]
+- **Specs**: [Link to archived specs]
 
 ## 📋 Changes Summary
 [Description of implemented changes]

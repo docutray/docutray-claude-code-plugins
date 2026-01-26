@@ -30,7 +30,7 @@ Execute all critical project validations in parallel:
 - 🏗️ **Build**: Compile complete project (optional with --fast)
 
 Optional (repo-specific):
-- 📄 **OpenSpec**: Validate and/or archive an OpenSpec change before opening a PR
+- 📄 **OPSX**: Verify and/or archive an OPSX change before opening a PR
 
 **Note**: Specific commands are configured per project in `.claude/details/commands/check.md`
 
@@ -82,25 +82,25 @@ This file must define:
 }
 ```
 
-### OpenSpec integration (optional)
+### OPSX (OpenSpec) integration (optional)
 
-If the repo uses OpenSpec (i.e., it has an `openspec/` directory), you can include OpenSpec as validations in `.claude/details/commands/check.md`.
+If the repo uses OPSX (i.e., it has `openspec/config.yaml` or `openspec/` directory), you can include OPSX validations in `.claude/details/commands/check.md`.
 
-Common pattern: derive the change name from the current branch and run `openspec validate` and/or `openspec archive`.
+Common pattern: derive the change name from the current branch and run `openspec status` and/or `openspec workflow verify`.
 
 Example validations:
 
 ```json
 {
   "validations": {
-    "openspec_validate": {
-      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec validate $CHANGE",
-      "description": "Validate OpenSpec change format for current branch",
+    "opsx_status": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec status --change $CHANGE",
+      "description": "Check OPSX change status for current branch",
       "enabled": false
     },
-    "openspec_archive": {
-      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec archive $CHANGE --yes",
-      "description": "Archive OpenSpec change (pre-PR gate)",
+    "opsx_verify": {
+      "command": "CHANGE=$(git branch --show-current | sed 's|.*/||'); test -d openspec/changes/$CHANGE && openspec workflow verify $CHANGE",
+      "description": "Verify implementation matches specs (pre-PR gate)",
       "enabled": false
     }
   }
@@ -110,6 +110,7 @@ Example validations:
 Notes:
 - This assumes your branch name (suffix) matches the change folder name under `openspec/changes/`.
 - If your team uses a different naming convention, set `command` accordingly.
+- Use `/opsx:verify` and `/opsx:archive` slash commands for interactive verification and archiving.
 
 **Framework Examples**:
 
