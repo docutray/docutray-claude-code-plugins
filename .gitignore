@@ -13,3 +13,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Kimi Flow Skills backups (created by install script)
+*.backup.*
+
+# Kimi local settings
+.kimi/settings.local.json
