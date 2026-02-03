@@ -13,7 +13,10 @@ NC='\033[0m' # No Color
 
 # Script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILLS_SOURCE="${SCRIPT_DIR}/.kimi/skills/devflow"
+SKILLS_SOURCE="${SCRIPT_DIR}/.kimi/skills"
+
+# Skills to install
+SKILLS=("devflow-dev" "devflow-feat" "devflow-check" "devflow-research" "devflow-epic" "devflow-review-pr")
 
 # Default: copy mode
 USE_SYMLINK=false
@@ -54,34 +57,13 @@ if [[ ! -d "${SKILLS_SOURCE}" ]]; then
     exit 1
 fi
 
-# Detect user's skills directory (priority order from Kimi CLI docs)
-detect_skills_dir() {
-    local dirs=(
-        "${HOME}/.config/agents/skills"
-        "${HOME}/.agents/skills"
-        "${HOME}/.kimi/skills"
-        "${HOME}/.claude/skills"
-        "${HOME}/.codex/skills"
-    )
-    
-    for dir in "${dirs[@]}"; do
-        if [[ -d "${dir}" ]]; then
-            echo "${dir}"
-            return
-        fi
-    done
-    
-    # Default to recommended location
-    echo "${HOME}/.config/agents/skills"
-}
-
-SKILLS_DIR=$(detect_skills_dir)
-TARGET_DIR="${SKILLS_DIR}/devflow"
+# Target skills directory (Kimi CLI standard location)
+SKILLS_DIR="${HOME}/.config/agents/skills"
 
 echo -e "${BLUE}DevFlow Flow Skills Installer for Kimi CLI${NC}"
 echo ""
 echo -e "Source: ${SKILLS_SOURCE}"
-echo -e "Target: ${TARGET_DIR}"
+echo -e "Target: ${SKILLS_DIR}"
 echo ""
 
 # Create directory if needed
@@ -90,31 +72,48 @@ if [[ ! -d "${SKILLS_DIR}" ]]; then
     mkdir -p "${SKILLS_DIR}"
 fi
 
-# Check if already exists
-if [[ -d "${TARGET_DIR}" ]] || [[ -L "${TARGET_DIR}" ]]; then
-    echo -e "${YELLOW}DevFlow skills already installed.${NC}"
+# Install each skill
+install_skill() {
+    local skill_name="$1"
+    local source_path="${SKILLS_SOURCE}/${skill_name}"
+    local target_path="${SKILLS_DIR}/${skill_name}"
+    
+    # Check if source exists
+    if [[ ! -d "${source_path}" ]]; then
+        echo -e "${YELLOW}Warning: Skill source not found: ${skill_name}${NC}"
+        return
+    fi
     
     # Backup existing installation
-    BACKUP_NAME="devflow.backup.$(date +%Y%m%d_%H%M%S)"
-    BACKUP_PATH="${SKILLS_DIR}/${BACKUP_NAME}"
+    if [[ -d "${target_path}" ]] || [[ -L "${target_path}" ]]; then
+        local backup_name="${skill_name}.backup.$(date +%Y%m%d_%H%M%S)"
+        local backup_path="${SKILLS_DIR}/${backup_name}"
+        
+        echo -e "${YELLOW}  Backing up existing: ${skill_name}${NC}"
+        mv "${target_path}" "${backup_path}"
+    fi
     
-    echo -e "${YELLOW}Creating backup: ${BACKUP_PATH}${NC}"
-    mv "${TARGET_DIR}" "${BACKUP_PATH}"
-fi
+    # Install
+    if [[ "${USE_SYMLINK}" == true ]]; then
+        ln -s "${source_path}" "${target_path}"
+        echo -e "${GREEN}  ✓ ${skill_name} (symlinked)${NC}"
+    else
+        cp -r "${source_path}" "${target_path}"
+        echo -e "${GREEN}  ✓ ${skill_name} (copied)${NC}"
+    fi
+}
 
-# Install
+# Install all skills
+echo -e "${BLUE}Installing flow skills...${NC}"
+for skill in "${SKILLS[@]}"; do
+    install_skill "${skill}"
+done
+
+echo ""
 if [[ "${USE_SYMLINK}" == true ]]; then
-    echo -e "${BLUE}Installing with symlinks (development mode)...${NC}"
-    ln -s "${SKILLS_SOURCE}" "${TARGET_DIR}"
-    echo -e "${GREEN}✓ Symlinked DevFlow skills${NC}"
-    echo ""
     echo -e "${YELLOW}Note: Changes to the repository will automatically reflect.${NC}"
     echo -e "${YELLOW}      To update: cd ${SCRIPT_DIR} && git pull${NC}"
 else
-    echo -e "${BLUE}Installing by copying files...${NC}"
-    cp -r "${SKILLS_SOURCE}" "${TARGET_DIR}"
-    echo -e "${GREEN}✓ Copied DevFlow skills${NC}"
-    echo ""
     echo -e "${YELLOW}Note: To update, run this script again.${NC}"
 fi
 
@@ -134,4 +133,4 @@ echo "  1. Start Kimi CLI: kimi"
 echo "  2. Use any flow: /flow:devflow-feat"
 echo ""
 echo "Documentation:"
-echo "  ${SCRIPT_DIR}/.kimi/skills/devflow/"
+echo "  ${SKILLS_SOURCE}/"
