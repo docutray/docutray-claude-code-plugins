@@ -33,9 +33,9 @@ cd docutray-claude-code-plugins
 ### Método 3: Manual
 
 ```bash
-# Copiar a directorio de skills de Kimi
+# Copiar skills a directorio de Kimi
 mkdir -p ~/.config/agents/skills/
-cp -r .kimi/skills/devflow ~/.config/agents/skills/
+cp -r .kimi/skills/devflow-* ~/.config/agents/skills/
 ```
 
 ## Flujo de Trabajo
@@ -64,13 +64,12 @@ cp -r .kimi/skills/devflow ~/.config/agents/skills/
 ```
 .kimi/
 └── skills/
-    └── devflow/
-        ├── feat/SKILL.md        # Crear features
-        ├── dev/SKILL.md         # Implementar
-        ├── check/SKILL.md       # Validar
-        ├── review-pr/SKILL.md   # Revisar PRs
-        ├── research/SKILL.md    # Investigar
-        └── epic/SKILL.md        # Planificar epics
+    ├── devflow-feat/SKILL.md        # Crear features
+    ├── devflow-dev/SKILL.md         # Implementar
+    ├── devflow-check/SKILL.md       # Validar
+    ├── devflow-review-pr/SKILL.md   # Revisar PRs
+    ├── devflow-research/SKILL.md    # Investigar
+    └── devflow-epic/SKILL.md        # Planificar epics
 ```
 
 ## Diferencias con Claude Code Plugins
